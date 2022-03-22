@@ -1,0 +1,39 @@
+import Debug "mo:base/Debug";
+import Nat"mo:base/Nat";
+import Array"mo:base/Array";
+
+actor {
+    func Qsort(a:[Nat]):[Nat]{
+        let n = a.size();
+        let res = Array.thaw(a);
+        sort(res, 0, n-1);
+        return Array.freeze(res);
+    };
+
+    func sort(a:[var Nat], l:Nat, r:Nat){
+        var i = l;
+        var j = r;
+        let mid = a[(l + r) / 2];
+        while(i <= j){
+            while(a[i] < mid) i += 1;
+            while(a[j] > mid) j -= 1;
+            if(i <= j){
+                var tmp = a[i];
+                a[i] := a[j];
+                a[j] := tmp;
+                i += 1;
+                j -= 1;
+            };
+        };
+        if(i < r) sort(a, i, r);
+        if(l < j) sort(a, l, j);
+    };
+
+    public func QuickSort(a : [Nat]): async [Nat] {
+        Debug.print(debug_show(Qsort(a)));
+    }
+}
+
+//moc --package base $(dfx cache show)/base -r path/to/your/code.mo
+//通不过，但看不懂原因（implicitly啥的……）
+//暂时先交一下，听完讲解继续改orz
